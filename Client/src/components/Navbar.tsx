@@ -20,6 +20,8 @@ export default function Navbar() {
   const selectedProvinces = ["A", "b"];
 
 
+
+
   // const [selectedProvinces, setSelectedProvinces] = useState<Province[]>([]);
   const navigate = useNavigate();
 

@@ -12,7 +12,7 @@ import {
 import { Report } from "../../types";
 import { mockReports } from "../../mockData";
 import { ReportInput } from "./ReportInput";
-
+import { ReportModal } from "./ReportModal";
 
 const categoryColors = {
   Deforestation: "bg-red-500",
@@ -34,14 +34,12 @@ const categoryIcons = {
   Other: AlertCircle,
 };
 
-export default function Reportz() {
+export  function ReportList() {
   const [reports, _] = useState<Report[]>(mockReports);
-  const [selectreport, setSelectReport] = useState<Report>();
-
+  const [selectReport, setSelectedReport] = useState<Report|null>(null);
 
   return (
     <div className="relative top-10 min-h-screen bg-stone-50">
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-green-800 mb-2">
@@ -54,14 +52,14 @@ export default function Reportz() {
 
         <ReportInput />
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
-          <div className="hidden md:block">
+          <div className="">
             <table className="w-full">
               <thead className="bg-green-50 border-b border-stone-200">
                 <tr>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-stone-700">
                     Category
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-stone-700">
+                  <th className=" hidden md:block px-6 py-4 text-left text-sm font-semibold text-stone-700">
                     Description
                   </th>
                   <th className="px-6 py-4 text-left text-sm font-semibold text-stone-700">
@@ -70,7 +68,7 @@ export default function Reportz() {
                   <th className="px-6 py-4 text-left text-sm font-semibold text-stone-700">
                     Reporter
                   </th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-stone-700">
+                  <th className=" hidden md:block px-6 py-4 text-left text-sm font-semibold text-stone-700">
                     Date
                   </th>
                 </tr>
@@ -80,7 +78,7 @@ export default function Reportz() {
                   return (
                     <tr
                       key={report.id}
-                      onClick={() => setSelectReport(report)}
+                      onClick={() => setSelectedReport(report)}
                       className="hover:bg-stone-50 cursor-pointer transition-colors"
                     >
                       <td className="px-6 py-4">
@@ -104,7 +102,7 @@ export default function Reportz() {
                         </div>
                       </td>
 
-                      <td className="px-6 py-4">
+                      <td className="hidden md:block px-6 py-4">
                         <p className="text-stone-600 line-clamp-2 max-w-md">
                           {report.description}
                         </p>
@@ -127,7 +125,7 @@ export default function Reportz() {
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className=" hidden md:block px-6 py-4">
                         <div className="flex items-center space-x-1 text-stone-600">
                           <Calendar className="w-4 h-4" />
                           <span className="text-sm">
@@ -142,70 +140,14 @@ export default function Reportz() {
             </table>
           </div>
 
-          <div className="md:hidden divide-y divide-stone-200">
-            {reports.map((report) => {
-              const Icon = categoryIcons[report.category];
-              return (
-                <div
-                  key={report.id}
-                  onClick={() => setSelectReport(report)}
-                  className="p-4 hover:bg-stone-50 cursor-pointer transition-colors"
-                >
-                  <div className="flex items-start space-x-3 mb-3">
-                    <div
-                      className={`${
-                        categoryColors[report.category]
-                      } p-2 rounded-lg flex-shrink-0`}
-                    >
-                      <Icon className="w-5 h-5 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-stone-800 mb-1">
-                        {report.category}
-                      </h3>
-                      <p className="text-sm text-stone-600 line-clamp-2 mb-2">
-                        {report.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  {report.photos.length > 0 && (
-                    <img
-                      src={report.photos[0]}
-                      alt="Report"
-                      className="w-full h-40 object-cover rounded-lg mb-3"
-                    />
-                  )}
-
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center space-x-2 text-stone-600">
-                      <MapPin className="w-4 h-4" />
-                      <span>
-                        {report.district}, {report.province}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">
-                          {report.reporter.name.charAt(0)}
-                        </div>
-                        <span className="text-stone-600">
-                          {report.reporter.name}
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-1 text-stone-500">
-                        <Calendar className="w-4 h-4" />
-                        <span>
-                          {new Date(report.date).toLocaleDateString()}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          
         </div>
+        {selectReport && (
+          <ReportModal
+            report={selectReport}
+            onClose={() => setSelectedReport(null)}
+          />
+        )}
       </div>
     </div>
   );

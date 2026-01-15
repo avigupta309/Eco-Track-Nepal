@@ -34,10 +34,22 @@ export interface Report {
   reporter: {
     name: string;
     email: string;
+    address:string;
   };
 }
 
 export interface User {
   name: string;
   email: string;
+}
+
+export interface FormReport {
+  lat: number;
+  long: number;
+  category: string;
+  district: string;
+  province: string;
+  description:string,
+  address: string;
+  images: FileList;
 }
