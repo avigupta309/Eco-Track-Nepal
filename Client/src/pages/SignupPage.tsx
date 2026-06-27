@@ -1,8 +1,9 @@
-import { Leaf, Mail, Lock, User, Phone, MapPin, User2 } from "lucide-react";
+import { Leaf, Mail, Lock, User, Phone, MapPin, LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { signUpProps } from "../types";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export default function SignupPage() {
       await axios.post("http://localhost:3000/api/user", data);
       navigate("/login");
     } catch (error: any) {
+      toast.error("Something Went Wrong !");
       console.log(error.message);
     }
   };
@@ -207,7 +209,17 @@ export default function SignupPage() {
               type="submit"
               className="w-full bg-green-600 text-white py-2.5 rounded-lg font-semibold hover:bg-green-700 transition"
             >
-              Create Account
+              {isSubmitting ? (
+                <div className="flex items-center justify-center">
+                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                  Verifying...
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <LogIn size={18} className="mr-2" />
+                  Sign Up
+                </div>
+              )}
             </button>
           </form>
 

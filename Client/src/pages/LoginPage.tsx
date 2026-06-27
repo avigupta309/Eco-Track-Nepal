@@ -1,4 +1,4 @@
-import { Leaf, Mail, Lock } from "lucide-react";
+import { Leaf, Mail, Lock, LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -105,7 +105,17 @@ export default function LoginPage() {
               disabled={isSubmitting}
               className="w-full bg-green-600 text-white py-2.5 rounded-lg font-semibold hover:bg-green-700 transition-colors"
             >
-              Login
+              {isSubmitting ? (
+                <div className="flex items-center justify-center">
+                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+                  Signing In...
+                </div>
+              ) : (
+                <div className="flex items-center justify-center">
+                  <LogIn size={18} className="mr-2" />
+                  Sign In
+                </div>
+              )}
             </button>
           </form>
 
