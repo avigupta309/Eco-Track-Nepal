@@ -26,7 +26,7 @@ const requestSchema = new Schema(
             "teacher",
             "uncle",
             "friend",
-            "other",
+            "husband",
           ],
           default: "other",
         },

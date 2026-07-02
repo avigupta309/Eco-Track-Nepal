@@ -1,4 +1,4 @@
-import { Edit2, X } from "lucide-react";
+import { Edit2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ModifiedModal } from "./ModifiedModal";
 import axios from "axios";

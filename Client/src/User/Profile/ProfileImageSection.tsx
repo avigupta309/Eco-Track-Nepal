@@ -1,8 +1,10 @@
-import { Camera } from "lucide-react";
+import { Camera, Users } from "lucide-react";
 import { useDataContext } from "../../Context/ContextApi";
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { ShowSosHelper } from "../../components/sosActivity/showSOSHelper";
+import { RequestReceiveSOS } from "../../components/sosActivity/RequestReceiveSOS";
 
 export function ProfileImageSection() {
   const { user } = useDataContext();
@@ -10,6 +12,8 @@ export function ProfileImageSection() {
   const [previewImage, setPreviewImage] = useState(user?.profileImage);
   const [selectedFile, setSelectedFile] = useState<File>();
   const [sucess, setSucess] = useState<boolean>(false);
+  const [showHelper, setShowHeper] = useState<boolean>(false);
+  const [showReqest, setShowRequest] = useState<boolean>(false);
   const handlePreviewImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target?.files?.[0];
     if (file) {
@@ -22,15 +26,12 @@ export function ProfileImageSection() {
     if (!selectedFile) {
       return toast.error("Select the image first");
     }
-    setSucess(true)
+    setSucess(true);
     const formData = new FormData();
     formData.append("profilePic", selectedFile);
     formData.append("id", userId);
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/user/edituser",
-        formData,
-      );
+      await axios.post("http://localhost:3000/api/user/edituser", formData);
       toast.success("Profile Image Updated Sucessfully");
       setSucess(false);
     } catch (error: any) {
@@ -71,6 +72,39 @@ export function ProfileImageSection() {
           </button>
         )}
       </div>
+      <button
+        onClick={() => {
+          setShowHeper(!showHelper);
+        }}
+        className="p-2 border-2 border-red-300 hover:border-red-400 text-red-700 rounded-lg transition-colors duration-200 font-medium"
+      >
+        Show My Helper
+      </button>
+      <button
+        onClick={() => {
+          setShowRequest(!showReqest);
+        }}
+        className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 shadow-sm transition-all duration-200 hover:border-red-300 hover:bg-red-50 hover:shadow-md"
+      >
+        <Users size={20} className="text-red-500" />
+        <span className="font-medium text-gray-700">Requests</span>
+      </button>
+      {showHelper && (
+        <ShowSosHelper
+          userId={userId}
+          onClose={() => {
+            setShowHeper(!showHelper);
+          }}
+        />
+      )}
+      {showReqest && (
+        <RequestReceiveSOS
+          userId={userId}
+          onClose={() => {
+            setShowRequest(!showReqest);
+          }}
+        />
+      )}
     </div>
   );
 }

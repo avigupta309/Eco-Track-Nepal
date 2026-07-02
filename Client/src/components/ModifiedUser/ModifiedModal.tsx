@@ -14,7 +14,7 @@ export function ModifiedModal({ userId, onClose }: ModalControlProps) {
     handleSubmit,
     register,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<userProps>();
   const [user, setUser] = useState<userProps>();
   useEffect(() => {

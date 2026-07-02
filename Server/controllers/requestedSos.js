@@ -1,5 +1,7 @@
 import { requestSosModel } from "../models/requestSos.js";
 import { sosModel } from "../models/sos.js";
+import { userModel } from "../models/user.js";
+import { confirmHelperRelationship } from "./sos.js";
 
 export async function handleRequestSos(data) {
   const { helperId, userId, relation } = data;
@@ -38,8 +40,13 @@ export async function handleRequestSos(data) {
 
 export async function updateRequestStatus(req, res) {
   const { userId, requesters, status } = req.body;
+  if (!status) {
+    console.log("Cannot go forward because request is denied");
+    return;
+  }
   try {
     await handleUserSideSos(req.body);
+    await confirmHelperRelationship(req.body);
     const requester = await requestSosModel.findOneAndUpdate(
       {
         requestedTo: userId,
@@ -80,5 +87,46 @@ export async function handleUserSideSos(data) {
     }
   } catch (error) {
     throw new error("Sorry You Not Here in Helper list");
+  }
+}
+
+export async function SendImmediateAlert(req, res) {
+  const { userId } = req.body;
+  try {
+    return res.status(201).json({ msg: "alert send sucessfully" });
+  } catch (error) {
+    return res.status(404).json({ msg: "Cannot send the alert msg" });
+  }
+}
+
+export async function requestReceive(req, res) {
+  const { userId } = req.body;
+  const requestedTo = userId;
+  try {
+    const request = await requestSosModel
+      .findOne({
+        requestedTo: requestedTo,
+      })
+      .populate("requestedFrom.requesters");
+    return res.status(201).json({ data: request });
+  } catch (error) {
+    return res.status(404).json({ msg: "Cannot send the request" });
+  }
+}
+
+export async function sosHelperAvailable(req, res) {
+  const { userId } = req.body;
+  try {
+    const sos = await sosModel.findOne({ userInfo: userId });
+
+    const helperIds = sos?.helperInfo.map((item) => item.helper) || [];
+    helperIds.push(userId);
+    const users = await userModel.find({
+      _id: { $nin: helperIds },
+    });
+    return res.status(201).json({ data: users });
+  } catch (error) {
+    console.log(error.message);
+    return res.status(404).json({ msg: "No Any Helper Is Available" });
   }
 }

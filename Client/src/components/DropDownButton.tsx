@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  AlertTriangle,
   LogOut,
   LucideEarth,
   MoonIcon,
@@ -11,6 +12,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useDataContext } from "../Context/ContextApi";
+import { sendImmergencyAlert } from "./sosActivity/alert";
 
 export function DropDownButton() {
   const [theme, setTheme] = useState<boolean>(false);
@@ -58,6 +60,13 @@ export function DropDownButton() {
             <MoonIcon className="h-4 w-4 mr-2 text-blue-700" />
           )}
           Toggle Theme
+        </button>
+        <button
+          onClick={sendImmergencyAlert}
+          className="w-full text-left px-4 py-2 text-red-700 hover:bg-red-100 flex items-center"
+        >
+          <AlertTriangle className="h-4 w-4 mr-2 text-red-600" />
+          HELP
         </button>
 
         <button

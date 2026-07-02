@@ -28,7 +28,7 @@ const sosSchema = new Schema(
             "teacher",
             "uncle",
             "friend",
-            "other",
+            "husband",
           ],
           default: "other",
         },

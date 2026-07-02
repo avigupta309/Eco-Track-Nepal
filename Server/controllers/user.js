@@ -3,7 +3,6 @@ import { createToken } from "../service/user.js";
 import { userDP } from "../upload/user.js";
 
 export async function HandleUserSignUp(req, res) {
-  console.log(req.body);
   const { fullName, email, phoneNumber, password, role, address } = req.body;
   const user = await userModel.findOne({ email: email });
   if (user) return res.status(409).json({ data: "Email is already Exist" });
@@ -62,7 +61,6 @@ export async function handleLogOut(req, res) {
     res.clearCookie("userToken");
     return res.status(200).json({ message: "Logged out" });
   } catch (error) {
-    console.log("Cannot LogOut Here");
     return res.status(404).json({ message: "Cannot Logged out" });
   }
 }

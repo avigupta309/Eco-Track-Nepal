@@ -1,15 +1,17 @@
-import { Calendar, Edit2, Mail, MapPin, Phone } from "lucide-react";
+import { Calendar, Edit2, Mail, MapPin, Phone, Plus, X } from "lucide-react";
 import { ProfileImageSection } from "./ProfileImageSection";
 import { EditUserInfo } from "./EditUserInfo";
 import { useState } from "react";
 import { ShowPasswordModal } from "./ShowPasswordModal";
 import { useDataContext } from "../../Context/ContextApi";
 import { formatDateTime } from "../../pages/Report/FormattedDat";
+import { SelectSOSuser } from "../../components/sosActivity/selectSOSUser";
 
 export function Header() {
   const { user } = useDataContext();
   const [editProfile, setEditProfile] = useState<boolean>(false);
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
+  const [SOSUSer, setSOSUser] = useState<boolean>(false);
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden mt-20">
       <div className="p-8 w-full">
@@ -29,6 +31,26 @@ export function Header() {
                       {formatDateTime(user?.updatedAt as string)}
                     </p>
                   </div>
+                  <button
+                    onClick={() => setSOSUser(!SOSUSer)}
+                    className={`flex items-center gap-2 rounded-xl px-4 py-2 font-medium transition-all duration-200 ${
+                      SOSUSer
+                        ? "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        : "bg-red-500 text-white hover:bg-red-600 shadow-md hover:shadow-lg"
+                    }`}
+                  >
+                    {SOSUSer ? (
+                      <>
+                        <X size={18} />
+                        <span>Close</span>
+                      </>
+                    ) : (
+                      <>
+                        <Plus size={18} />
+                        <span>SOS Contact</span>
+                      </>
+                    )}
+                  </button>
                   <button
                     onClick={() => {
                       setEditProfile(!editProfile);
@@ -92,6 +114,7 @@ export function Header() {
           showPasswordModal={showPasswordModal}
         />
       )}
+      {SOSUSer && <SelectSOSuser />}
     </div>
   );
 }
